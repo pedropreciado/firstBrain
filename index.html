@@ -9,26 +9,36 @@
 
       html {
         font-family: 'Roboto', sans-serif;
+        height: 100%;
+      }
+
+      label {
+        margin-left: 45%;
       }
 
       #example {
         font-size: 50px;
         text-align: center;
-        margin: auto 0;
+        /* margin-top: 25%; */
       }
 
     </style>
 
   </head>
   <body>
-    <input type="color" value="#ff0000"/>
-    <div id="example">🐶 Watch me switch! 🐶</div>
+
+      <div id="example">🐶 Watch me switch! 🐶</div>
+
+      <label>
+        change me:
+      <input type="color" value="#ff0000"/>
+      </label>
 
     <script src="https://unpkg.com/brain.js@1.1.2/browser.min.js">
     </script>
     <script>
 
-      function getRgb(hex) {
+      function getRGB(hex) {
         var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
         hex = hex.replace(shorthandRegex, (m, r, g, b) => {
           return r + r + g + g + b + b;
@@ -37,12 +47,79 @@
         var result = /^#?([a-f\d]){2}([a-f\d]){2}([a-f\d]){2}$/i.exec(hex);
         return result ? {
           r: Math.round(parseInt(result[1], 16) / 2.55) / 100,
-          r: Math.round(parseInt(result[2], 16) / 2.55) / 100,
-          r: Math.round(parseInt(result[3], 16) / 2.55) / 100,
+          g: Math.round(parseInt(result[2], 16) / 2.55) / 100,
+          b: Math.round(parseInt(result[3], 16) / 2.55) / 100,
         } : null;
       }
 
     </script>
 
+    <script>
+      const input = document.querySelector("input");
+      const example = document.querySelector("#example");
+      const html = document.querySelector("html");
+      const network = new brain.NeuralNetwork();
+
+      network.train([
+        {
+          input: {
+            r: 0.62,
+            g: 0.72,
+            b: 0.88
+          },
+          output: {
+            light: 1
+          },
+        },
+        {
+          input: {
+            r: 0.1,
+            g: 0.84,
+            b: 0.88
+          },
+          output: {
+            light: 1
+          },
+        },
+        {
+          input: {
+            r: 0.33,
+            g: 0.24,
+            b: 0.29
+          },
+          output: {
+            dark: 1
+          },
+        },
+        {
+          input: {
+            r: 0.74,
+            g: 0.78,
+            b: 0.86
+          },
+          output: {
+            light: 1
+          },
+        },
+        {
+          input: {
+            r: 0.31,
+            g: 0.35,
+            b: 0.41
+          },
+          output: {
+            dark: 1
+          },
+        },
+        ]);
+
+      input.addEventListener("change", (event) => {
+        const rgb = getRGB(event.target.value);
+        const result = network.run(rgb);
+        console.log(result);
+        html.style.background = event.target.value;
+      })
+
+    </script>
   </body>
 </html>
