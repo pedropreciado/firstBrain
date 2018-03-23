@@ -1,9 +1,8 @@
 const brain = require("brain.js");
 const network = new brain.NeuralNetwork();
+const rgbData = require("./rgb_dataset.js");
 
-network.train([
-  {input: { r, g, b }, output: {dark: 1}},
-]);
+network.train(rgbData);
 
-const result = network.run({height: 70, weight: 200});
+const result = network.run({ r: 0, g: 1, b: 0.65 });
 console.log(result);
