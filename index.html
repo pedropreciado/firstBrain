@@ -10,6 +10,11 @@
       html {
         font-family: 'Roboto', sans-serif;
         height: 100%;
+        background: #898384;
+      }
+
+      body {
+        margin: auto 0;
       }
 
       label {
@@ -22,6 +27,15 @@
         /* margin-top: 25%; */
       }
 
+      h6 {
+        margin: 0 auto;
+        text-align: center;
+        padding-bottom: 10px;
+        padding-right: 10px;
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+      }
     </style>
 
   </head>
@@ -30,12 +44,13 @@
       <div id="example">🐶 Watch me switch! 🐶</div>
 
       <label>
-        change me:
+        <a>change me:</a>
       <input type="color" value="#ff0000"/>
       </label>
 
     <script src="https://unpkg.com/brain.js@1.1.2/browser.min.js">
     </script>
+
     <script>
 
     function getRGB(hex) {
@@ -53,95 +68,114 @@
   }
     </script>
 
-    <script>
-      const input = document.querySelector("input");
-      const example = document.querySelector("#example");
-      const html = document.querySelector("html");
-      const network = new brain.NeuralNetwork();
 
-      network.train([
-        {
-          input: {
-            r: 0.62,
-            g: 0.72,
-            b: 0.88,
-          },
-          output: {
-            light: 1,
-          },
+    <footer>
+      <h6>made with brain.js</h6>
+    </footer>
+    <script>
+    const input = document.querySelector("input");
+    const example = document.querySelector("#example");
+    const html = document.querySelector("html");
+    const a = document.querySelector("a");
+    const footer = document.querySelector("h6");
+
+    const network = new brain.NeuralNetwork();
+
+    network.train([
+      {
+        input: {
+          r: 0.62,
+          g: 0.72,
+          b: 0.88,
         },
-        {
-          input: {
-            r: 0.1,
-            g: 0.84,
-            b: 0.72,
-          },
-          output: {
-            light: 1,
-          },
+        output: {
+          light: 1,
         },
-        {
-          input: {
-            r: 0.33,
-            g: 0.24,
-            b: 0.29,
-          },
-          output: {
-            dark: 1,
-          },
+      },
+      {
+        input: {
+          r: 0.1,
+          g: 0.84,
+          b: 0.72,
         },
-        {
-          input: {
-            r: 0.74,
-            g: 0.78,
-            b: 0.86,
-          },
-          output: {
-            light: 1,
-          },
+        output: {
+          light: 1,
         },
-        {
-          input: {
-            r: 0.31,
-            g: 0.35,
-            b: 0.41,
-          },
-          output: {
-            dark: 1,
-          },
+      },
+      {
+        input: {
+          r: 0.33,
+          g: 0.24,
+          b: 0.29,
         },
-        {
-          input: {
-            r: 0.92,
-            g: 1,
-            b: 0.01,
-          },
-          output: {
-            light: 1,
-          }
+        output: {
+          dark: 1,
         },
-        {
-          input: {
-            r: 0.4,
-            g: 0.44,
-            b: 1
-          },
-          output: {
-            dark: 1
-          }
+      },
+      {
+        input: {
+          r: 0.74,
+          g: 0.78,
+          b: 0.86,
+        },
+        output: {
+          light: 1,
+        },
+      },
+      {
+        input: {
+          r: 0.31,
+          g: 0.35,
+          b: 0.41,
+        },
+        output: {
+          dark: 1,
+        },
+      },
+      {
+        input: {
+          r: 0.92,
+          g: 1,
+          b: 0.01,
+        },
+        output: {
+          light: 1,
         }
-        ]);
+      },
+      {
+        input: {
+          r: 0.4,
+          g: 0.44,
+          b: 1
+        },
+        output: {
+          dark: 1
+        }
+      },
+      {
+        input: {
+          r: 0.54,
+          g: 0.51,
+          b: 0.52
+        },
+        output:{
+          dark: 1
+        }
+      }
+      ]);
 
       input.addEventListener("change", (event) => {
         const rgb = getRGB(event.target.value);
-        console.log(rgb);
         const result = brain.likely(rgb, network);
 
         html.style.background = event.target.value;
 
-        example.style.color = result === "dark" ? "white" : "black";
-      })
 
+        example.style.color = result === "dark" ? "white" : "black";
+        a.style.color = result === "dark" ? "white" : "black";
+        footer.style.color = result === "dark" ? "white" : "black";
+
+      })
     </script>
   </body>
 </html>
